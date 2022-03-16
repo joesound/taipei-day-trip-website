@@ -1,11 +1,11 @@
 import mysql.connector
-from utils.config import SQL_USER, SQL_PASSWORD
+#from utils.config import SQL_USER, SQL_PASSWORD
  
         
 mydb = mysql.connector.connect(     #登入資料庫
                 host="localhost",
-                user= SQL_USER ,
-                password= SQL_PASSWORD ,
+                user= 'root' ,
+                password= 'root',
                 database="taipei_attraction"
                 )
 
@@ -17,9 +17,8 @@ def get_attraction_by_page_keyword(page,keyword):
             low_limit = page * 12
             sql="SELECT main.id,main.name,CAT2.cat2_name,main.description,main.address,bus.bus_name,mrt.mrt_name,main.longitude,main.latitude,image_sort.image_url FROM ((((main INNER JOIN CAT2 ON main.CAT2_id = CAT2.id) INNER JOIN bus ON main.id = bus.main_id) INNER JOIN mrt ON main.mrt_id = mrt.id) INNER JOIN (SELECT image.main_id, group_concat(image.image_url order by image.main_id SEPARATOR ',') image_url FROM image GROUP BY image.main_id) image_sort ON main.id = image_sort.main_id) WHERE main.description LIKE %s LIMIT %s,13;"
             val=(keyword,low_limit,)
-            mycursor.execute(sql, val)
+            mycursor.execute(sql.lower(), val)
             datas = mycursor.fetchall()
-            mycursor.close  
             if len(datas) > 12:
                 data = {
                     "nextPage": page+1,
@@ -50,9 +49,10 @@ def get_attraction_by_page_keyword(page,keyword):
                     "mrt": each_data[6],
                     "latitude": each_data[7],
                     "longitude": each_data[8],
-                    "images": [each_data[9]]
+                    "images": [each_data[9].split(",")]
                 }
                 data["data"].append(insert_data)
+            mycursor.close  
             return data
         except mysql.connector.Error as err:
             mycursor.close
@@ -64,7 +64,7 @@ def get_attraction_by_id(id):
     try:
         sql="SELECT main.id,main.name,CAT2.cat2_name,main.description,main.address,bus.bus_name,mrt.mrt_name,main.longitude,main.latitude,image_sort.image_url FROM ((((main INNER JOIN CAT2 ON main.CAT2_id = CAT2.id) INNER JOIN bus ON main.id = bus.main_id) INNER JOIN mrt ON main.mrt_id = mrt.id) INNER JOIN (SELECT image.main_id, group_concat(image.image_url order by image.main_id SEPARATOR ',') image_url FROM image GROUP BY image.main_id) image_sort ON main.id = image_sort.main_id) WHERE main.id = %s;"
         val=(id,)
-        mycursor.execute(sql, val)
+        mycursor.execute(sql.lower(), val)
         datas = mycursor.fetchone()
         mycursor.close  
         if datas:
