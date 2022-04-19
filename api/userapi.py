@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, session, redirect, url_for, B
 import json
 import time
 from utils.config import URL_BS
-from sympy import Domain
+#from sympy import Domain
 from utils.creatJWT import creat_user_JWT, decode_user_JWT
 from utils.usercheck import uesr_signin_check, creat_user_check, get_user_by_name
 
