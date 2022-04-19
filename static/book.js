@@ -417,25 +417,25 @@ TPDirect.card.setup({fields:fields,
         const emailRule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
         let emaildValue = getemail.value
         let phoneVlue = getphone.value
-        if(emaildValue.search(emailRule)!= -1){
-            let status = 1
-        }else{
-            alert("email錯誤");
-            return 0
-        }​
-        if (phoneVlue==""){
-            alert("電話輸入錯誤");
-            return 0
-        }
-        else if (phoneVlue.lengh !==9){
-            alert("電話輸入錯誤");
-            return 0
-        }
-        function changePhoneFormat(phoneNumber){
-            check_number = substr(phoneNumber, 0, 2);
-            return check_number == '09' ?  '+886'.substr(phoneNumber, 1, strlen(phoneNumber)) : phoneNumber;
-        }
-        userPhone = changePhoneFormat(phoneVlue);
+        // if(emaildValue.search(emailRule)!= -1){
+        //     let status = 1
+        // }else{
+        //     alert("email錯誤");
+        //     return 0
+        // }​
+        // if (phoneVlue==""){
+        //     alert("電話輸入錯誤");
+        //     return 0
+        // }
+        // else if (phoneVlue.lengh !==9){
+        //     alert("電話輸入錯誤");
+        //     return 0
+        // }
+        // function changePhoneFormat(phoneNumber){
+        //     check_number = substr(phoneNumber, 0, 2);
+        //     return check_number == '09' ?  '+886'.substr(phoneNumber, 1, strlen(phoneNumber)) : phoneNumber;
+        // }
+        // userPhone = changePhoneFormat(phoneVlue);
         order_info = {
             "prime": result.card.prime,
             "order": {
@@ -453,7 +453,7 @@ TPDirect.card.setup({fields:fields,
               "contact": {
                 "name": getUser.value,
                 "email": emaildValue,
-                "phone": userPhone
+                "phone": phoneVlue
               }
             }
         }
