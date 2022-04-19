@@ -2,7 +2,7 @@ import datetime
 import requests
 from utils.config import TRADE_KEY, PARTNER_KEY
 import json
-
+parner_key = PARTNER_KEY()
 
 def trade_order(trade_info):
     trade_status = False
@@ -11,11 +11,11 @@ def trade_order(trade_info):
     url = "https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime"
     headers = {
         'content-type': 'application/json',
-        "x-api-key": PARTNER_KEY
+        "x-api-key": parner_key
     }
     data = {
         "prime": trade_info["prime"],
-        "partner_key": PARTNER_KEY,
+        "partner_key": parner_key,
         "merchant_id": "wltaipeitrip_CTBC",
         "details":"TapPay Test",
         "order_number":order_number,

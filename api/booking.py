@@ -4,7 +4,7 @@ from utils.creatJWT import creat_user_JWT, decode_user_JWT
 from utils.bookmiddleware import get_user_book, check_book_content, booking_trip, delete_user_book
 from utils.config import URL_BS
 app_api_booking = Blueprint('uesr_booking', __name__, url_prefix='/api')
-request_url = URL_BS
+request_url = URL_BS()
 
 @app_api_booking.route("/booking", methods=['GET','POST','DELETE','OPTIONS'])
 def user_booking():

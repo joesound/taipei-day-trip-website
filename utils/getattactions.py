@@ -1,11 +1,12 @@
 import mysql.connector
 #from utils.config import SQL_USER, SQL_PASSWORD
 from utils.config import MYSQL_ACCOUNT, MYSQL_PASSWORD
-        
+account = MYSQL_ACCOUNT()
+password = MYSQL_PASSWORD()
 mydb = mysql.connector.connect(     #登入資料庫
                 host="localhost",
-                user= MYSQL_ACCOUNT ,
-                password= MYSQL_PASSWORD,
+                user= account ,
+                password= password,
                 database="taipei_attraction"
                 )
 

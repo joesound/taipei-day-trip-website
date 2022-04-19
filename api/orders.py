@@ -6,7 +6,7 @@ from utils.CRUDorder import read_order, creat_order, read_order_by_number
 from utils.CRUDbook import delete_booking
 from utils.config import URL_BS
 
-request_url = URL_BS
+request_url = URL_BS()
 
 app_api_order = Blueprint('uesr_order', __name__, url_prefix='/api')
 
