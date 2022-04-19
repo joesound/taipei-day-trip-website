@@ -3,7 +3,7 @@
 
 //reducer for index pageupdate
 
-const local = "http://127.0.0.1:3000/"
+const local = "http://52.73.173.92:3000/"
 
 async function pageUpdate(action){ 
 
@@ -423,7 +423,7 @@ function creat_block(insert_data){
     creat_div_as_block.className = "block";
     creat_div_as_block.id = id;
     creat_div_for_info.className = "info_block";
-
+    creat_div_as_block.style.cursor = "pointer"
     creat_div_for_name.appendChild(text_info_name);
     creat_div_for_mrt.appendChild(text_info_mrt);
     creat_div_for_cat.appendChild(text_info_cat);

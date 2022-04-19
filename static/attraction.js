@@ -1,5 +1,5 @@
 
-const local = "http://127.0.0.1:3000/"
+const local = "http://52.73.173.92:3000/"
 
 const get_morning_bt = document.getElementById("morning_bt");
 const get_afternoon_bt = document.getElementById("afternoon_bt");

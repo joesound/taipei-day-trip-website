@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, session, redirect, url_for, B
 from utils.getattactions import get_attraction_by_page_keyword, get_attraction_by_id
 from utils.querystrcheck import query_str_check, query_by_id
 import json
+from utils.config import URL_BS
 
 app_api_attractions = Blueprint('attraction', __name__, url_prefix='/api')
 

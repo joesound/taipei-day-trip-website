@@ -4,10 +4,10 @@
 
 
 
+const local = "http://52.73.173.92:3000/"
 
 
-
-
+TPDirect.setupSDK(124032, 'app_RfmwciFg0qYVKj8pr62iwU5wVBJqdFDCH7d94fHg8WAIkydqWPk2KjV9skug', 'sandbox')
 loadpage()
 
 
@@ -37,9 +37,12 @@ async function loadpage(){
     }
     response = await getUserbook();
     if (response["data"]){
+        turn_on_block();
         user_name =  user_status_data["data"]["name"]
         console.log(user_status_data)
         booking_block(user_name, response);
+        // const get_paybt = document.querySelector("#paybt");
+        // get_paybt.addEventListener("click", (event)=>payment(event))
     }
     else{
         remove_all_block();
@@ -150,6 +153,22 @@ function book_block_empty(name){
     creatBookingcontent.appendChild(creatBookingheader)
     creatBookingcontent.appendChild(creatNobook)
     getMaincontainer.appendChild(creatBookingcontent)
+
+}
+
+
+function turn_on_block(){
+    const getAttractionContainer = document.querySelector(".attraction-container");
+    const getContactContainer = document.querySelector(".user-contact-container");
+    const getPaymentContainer = document.querySelector(".payment-container");
+    const getFinalContainer = document.querySelector(".final-submit-container");
+
+    getAttractionContainer.style.display="grid";
+    getContactContainer.style.display="block";
+    getPaymentContainer.style.display="block";
+    getFinalContainer.style.display="flex";
+
+
 
 }
 
@@ -302,6 +321,156 @@ function sigupInputcheck(){
 }
 
 
+// TPDirect.card.setup('#cardview-container')
+var fields = {
+    number: {
+        // css selector
+        element: document.getElementById('card-number'),
+        placeholder: '**** **** **** ****'
+        },
+    expirationDate: {
+        // DOM object
+        element: document.getElementById('card-expiration-date'),
+        placeholder: 'MM / YY'
+        },
+    ccv: {
+        element: document.getElementById('card-ccv'),
+        placeholder: 'ccv'
+        }
+            }
+
+TPDirect.card.setup({fields:fields,
+    styles: {
+        // Style all elements
+        'input': {
+            'color': 'gray'
+        },
+        // Styling ccv field
+        'input.ccv': {
+            'font-size': '16px',
+            'width': '200px',
+            'height': '38px',
+            'background': '#FFFFFF',
+            'border': '1px solid #E8E8E8',
+            'box-sizing': 'border-box',
+            'border-radius': '5px',
+            'text-indent': '10px',
+            'margin-top': '15px',
+            'cursor':'pointer',
+        },
+        // Styling expiration-date field
+        'input.expiration-date': {
+            'font-size': '16px',
+            'width': '200px',
+            'height': '38px',
+            'background': '#FFFFFF',
+            'border': '1px solid #E8E8E8',
+            'box-sizing': 'border-box',
+            'border-radius': '5px',
+            'text-indent': '10px',
+            'margin-top': '15px',
+            'cursor':'pointer',
+        },
+        // Styling card-number field
+        'input.card-number': {
+            'font-size': '16px',
+            'width': '200px',
+            'height': '38px',
+            'background': '#FFFFFF',
+            'border': '1px solid #E8E8E8',
+            'box-sizing': 'border-box',
+            'border-radius': '5px',
+            'text-indent': '10px',
+            'margin-top': '15px',
+            'cursor':'pointer',
+        },
+        // style focus state
+        ':focus': {
+            // 'color': 'black'
+        },
+        // style valid state
+        '.valid': {
+            'color': 'green'
+        },
+        // style invalid state
+        '.invalid': {
+            'color': 'red'
+        }
+    }})
+
+
+
+ function payment() {
+
+    // Get prime
+    TPDirect.card.getPrime(async (result) => {
+        if (result.status !== 0) {
+            alert('get prime error ' + result.msg)
+            return
+        }
+
+        // alert('get prime 成功，prime: ' + result.card.prime)
+        user_book_data = await getUserbook()
+        const getUser = document.querySelector("#username");
+        const getemail = document.querySelector("#email");
+        const getphone = document.querySelector("#phone");
+        const emailRule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+        let emaildValue = getemail.value
+        let phoneVlue = getphone.value
+        // if(emaildValue.search(emailRule)!= -1){
+        //     let status = 1
+        // }else{
+        //     alert("email錯誤");
+        //     return 0
+        // }​
+        // if (phoneVlue==""){
+        //     alert("電話輸入錯誤");
+        //     return 0
+        // }
+        // else if (phoneVlue.lengh !==9){
+        //     alert("電話輸入錯誤");
+        //     return 0
+        // }
+        // function changePhoneFormat(phoneNumber){
+        //     check_number = substr(phoneNumber, 0, 2);
+        //     return check_number == '09' ?  '+886'.substr(phoneNumber, 1, strlen(phoneNumber)) : phoneNumber;
+        // }
+        // userPhone = changePhoneFormat(phoneVlue);
+        order_info = {
+            "prime": result.card.prime,
+            "order": {
+              "price": user_book_data["data"]["price"],
+              "trip": {
+                "attraction": {
+                  "id": user_book_data["data"]["attraction"]["id"],
+                  "name": user_book_data["data"]["attraction"]["name"],
+                  "address": user_book_data["data"]["attraction"]["address"],
+                  "image": user_book_data["data"]["attraction"]["image"]
+                },
+                "date": user_book_data["data"]["date"],
+                "time": user_book_data["data"]["time"]
+              },
+              "contact": {
+                "name": getUser.value,
+                "email": emaildValue,
+                "phone": phoneVlue
+              }
+            }
+        }
+        resp = await creat_order(order_info)
+        if (resp["data"]){
+            document.location.href = `${local}thankyou?number=${resp["data"]["number"]}`
+        }
+        if (resp["error"]){
+            alert(resp["message"])
+        }
+        
+        // send prime to your server, to pay with Pay by Prime API .
+        // Pay By Prime Docs: https://docs.tappaysdk.com/tutorial/zh/back.html#pay-by-prime-api
+    })
+}
+
+
 function siginInputcheck(){
     const getInputemail = document.querySelector("#siginemail");
     const getInputpassword = document.querySelector("#siginpassword");
@@ -352,6 +521,16 @@ async function deleteUserbook(){
     let response = await fetch(`${local}api/booking`,
     {method:'DELETE',
     credentials: 'include'});
+    let response_to_json = await response.json()
+    return response_to_json
+}
+
+async function creat_order(order_info){
+    let response = await fetch(`${local}api/orders`,{
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify(order_info)
+    });
     let response_to_json = await response.json()
     return response_to_json
 }
