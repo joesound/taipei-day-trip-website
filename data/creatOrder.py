@@ -4,7 +4,7 @@ from utils.config import MYSQL_ACCOUNT, MYSQL_PASSWORD
 #資料庫連線
 mydb = mysql.connector.connect(     #登入資料庫
                 host="localhost",
-                user= MYSQL_ACCOUNT ,
+                user= MYSQL_ACCOUNT,
                 password= MYSQL_PASSWORD,
                 database="taipei_attraction"
                 )
@@ -20,7 +20,7 @@ def creat_table(table_style):
 #資料表style
 
 #建立use table(id, name, email)
-book_style = "`BOOKING`(`id` bigint PRIMARY KEY AUTO_INCREMENT, `email` varchar(3000) NOT NULL, `attractionid` bigint NOT NULL ,`date` DATE NOT NULL  ,`time` varchar(255) NOT NULL, `price` varchar(255) NOT NULL, FOREIGN KEY (`attractionId`) REFERENCES `main`(`id`))"
+order_style = "`order`(`id` bigint PRIMARY KEY AUTO_INCREMENT,`number` bigint NOT NULL, `price` bigint NOT NULL, `attractionid` bigint NOT NULL,`attractionname` varchar(255) NOT NULL, `address` varchar(255) NOT NULL,`image_url` varchar(255) NOT NULL, `date` DATE NOT NULL  ,`time` varchar(255) NOT NULL, `username` varchar(255) NOT NULL, `email` varchar(3000) NOT NULL, `phone` bigint NOT NULL, `status` INT NOT NULL)"
 
-creat_table(book_style)
+creat_table(order_style)
 

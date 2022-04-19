@@ -1,13 +1,13 @@
 from flask import Flask, render_template, request, session, redirect, url_for, Blueprint, make_response
 import json
 import time
-
+from utils.config import URL_BS
 from sympy import Domain
 from utils.creatJWT import creat_user_JWT, decode_user_JWT
 from utils.usercheck import uesr_signin_check, creat_user_check, get_user_by_name
 
 app_api_user = Blueprint('userCRUD', __name__, url_prefix='/api')
-request_url = "127.0.0.1:3000"
+request_url = URL_BS
 
 @app_api_user.route("/user", methods=['GET','POST','DELETE','PATCH', 'OPTIONS'])
 def user_api():
@@ -42,6 +42,7 @@ def user_api():
             response.set_cookie(key='user_token', value=get_user_JWT, expires=time.time()+6*60)
             response.headers['Access-Control-Allow-Origin']=request_url
             response.headers['Access-Control-Allow-Credentials']= "true"
+            print(response)
             return response
         else:
             response = make_response(json.dumps(message))

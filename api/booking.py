@@ -2,9 +2,9 @@ from flask import Flask, render_template, request, session, redirect, url_for, B
 import json
 from utils.creatJWT import creat_user_JWT, decode_user_JWT
 from utils.bookmiddleware import get_user_book, check_book_content, booking_trip, delete_user_book
-
+from utils.config import URL_BS
 app_api_booking = Blueprint('uesr_booking', __name__, url_prefix='/api')
-request_url = "127.0.0.1:3000"
+request_url = URL_BS
 
 @app_api_booking.route("/booking", methods=['GET','POST','DELETE','OPTIONS'])
 def user_booking():
@@ -18,7 +18,6 @@ def user_booking():
         decoded_JWT = decode_user_JWT(user_JWT)
         user_email = decoded_JWT["email"]
         code, data = get_user_book(user_email)
-        print(data)
         response = make_response(json.dumps(data))
         response.headers['Access-Control-Allow-Origin']=request_url
         response.headers['Access-Control-Allow-Credentials']= "true"
@@ -32,7 +31,6 @@ def user_booking():
             response.headers['Access-Control-Allow-Credentials']= "true"
             return response
         attraction_booking_info = json.loads(request.data)
-        print(attraction_booking_info)
         decoded_JWT = decode_user_JWT(user_JWT)
         user_email = decoded_JWT["email"]
         book_info  = {"email":user_email, "attractionid":attraction_booking_info["attractionid"], "date":attraction_booking_info["date"], "time":attraction_booking_info["time"], "price":attraction_booking_info["price"]}
